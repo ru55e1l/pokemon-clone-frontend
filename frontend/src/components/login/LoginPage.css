@@ -6,22 +6,23 @@ body {
     background-size: cover;
     height: 100vh;
 }
-.login-form {
+.form {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
     position: absolute;
     height: 100%;
-    width: 450px;
+    width: 550px;
     top: 50%;
     right: 5%;
     transform: translateY(-50%);
-    background-color: rgba(2, 2, 2, 0.8);
-    padding: 20px;
-    border-radius: 0px;
+    background-color: rgba(44, 36, 36, 0.9);
+    overflow: hidden;
+    transition: width 0.5s ease-in-out;
 }
 
 @media (max-width: 1000px) {
-    .login-page {
-        background-image: none;
-    }
 
     .login-form {
         height: 100%;
