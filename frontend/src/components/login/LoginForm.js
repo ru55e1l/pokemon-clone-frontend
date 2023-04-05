@@ -36,6 +36,7 @@ function LoginForm() {
         event.preventDefault();
         try {
             const msg = await login({username, password}).unwrap();
+            navigate('/welcome');
         } catch(err) {
             setError(err.data.message);
             errRef.current.focus();
