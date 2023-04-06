@@ -4,7 +4,8 @@ import {useDispatch} from "react-redux";
 import {apiSlice} from "../../app/api/apiSlice";
 import {useLoginMutation} from "../../app/api/authApiSlice";
 
-import { TextField, Button } from '@mui/material';
+import { TextField, Snackbar, Alert } from '@mui/material';
+import { LoadingButton } from '@mui/lab';
 function LoginForm() {
     const userRef = useRef();
     const errRef = useRef();
@@ -15,7 +16,7 @@ function LoginForm() {
 
     const [login, { isLoading}] = useLoginMutation();
     const dispatch = useDispatch();
-
+    const [errorOpen, setErrorOpen] = React.useState(false);
     useEffect(() => {
         userRef.current.focus();
     }, []);
@@ -38,18 +39,28 @@ function LoginForm() {
             const msg = await login({username, password}).unwrap();
             navigate('/welcome');
         } catch(err) {
+            setErrorOpen(true);
             setError(err.data.message);
             errRef.current.focus();
         }
+    };
+
+    const handleClose = (event, reason) => {
+        if (reason === 'clickaway') {
+            return;
+        }
+
+        setErrorOpen(false);
     };
 
     const inputStyles = { width: '70%', margin: '8px' };
 
     return (
 
+
         <form className="form" onSubmit={handleSubmit}>
-            <p ref={errRef} className={error ? "errmsg" : "offscreen"} aria-live="assertive">{error}</p>
             <TextField
+                error={error}
                 label="Username"
                 variant="outlined"
                 ref={userRef}
@@ -58,6 +69,7 @@ function LoginForm() {
                 sx={inputStyles}
             />
             <TextField
+                error={error}
                 label="Password"
                 type="password"
                 variant="outlined"
@@ -65,9 +77,14 @@ function LoginForm() {
                 onChange={handlePasswordChange}
                 sx={inputStyles}
             />
-            <Button sx={{width: '80%', height: '60px', margin: '30px'}} type="submit" variant="contained">
+            <LoadingButton sx={{width: '80%', height: '60px', margin: '30px'}} loading={isLoading} type="submit" variant="contained">
                 Login
-            </Button>
+            </LoadingButton>
+            <Snackbar open={errorOpen} autoHideDuration={6000} onClose={handleClose}>
+                <Alert onClose={handleClose} severity="error" sx={{ width: '100%' }}>
+                    {error}
+                </Alert>
+            </Snackbar>
         </form>
     );
 }

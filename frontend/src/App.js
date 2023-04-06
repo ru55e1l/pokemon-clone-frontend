@@ -15,9 +15,9 @@ function App() {
   return (
       <ThemeProvider theme={theme}>
           <Routes>
-              <Route index path="login" element={<Login/>} />
+              <Route path="login" element={<Login/>} />
               <Route element={<RequireAuth />}>
-                  <Route path="welcome" element={<WelcomePage/>} />
+                  <Route index path="welcome" element={<WelcomePage/>} />
               </Route>
 
           </Routes>
